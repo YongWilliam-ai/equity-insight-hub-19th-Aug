@@ -136,9 +136,46 @@ const sharedStats = [
 ] as const;
 
 export const breadthData = [
-  { market: "NYSE", ratio: 1.76 },
-  { market: "NASDAQ", ratio: 1.68 },
+  { market: "NYSE", ratio: 1.76, advance: 36.2, decline: 63.8 },
+  { market: "NASDAQ", ratio: 1.68, advance: 37.3, decline: 62.7 },
 ];
+
+export const breadthMetrics = {
+  averageDecline: 63.3,
+  actualVolume: 14.74,
+  averageVolume: 16.95,
+  volumeParticipation: 87.0,
+  volumeShortfall: 2.21,
+  energySectorMove: 0.87,
+};
+
+type BreadthDetail = {
+  compositionTitle: string;
+  compositionDescription: string;
+  advances: string;
+  declines: string;
+  volumeTitle: string;
+  volumeActual: string;
+  volumeAverage: string;
+  volumeDelta: string;
+  participationTitle: string;
+  participationBody: string;
+  riskTitle: string;
+  riskBody: string;
+  sectorTitle: string;
+  sectorBody: string;
+  chartNote: string;
+  sourceNote: string;
+};
+
+export const breadthDetailContent: Record<Language, BreadthDetail> = {
+  TW: {
+    compositionTitle: "交易所參與度", compositionDescription: "根據上漲／下跌家數比例換算為相對參與度；黃金代表上漲、珊瑚色代表下跌。", advances: "上漲", declines: "下跌", volumeTitle: "成交量參與度", volumeActual: "當日全美成交量", volumeAverage: "20 日平均成交量", volumeDelta: "較 20 日均量少 2.21 億股", participationTitle: "63.3% 平均為下跌股", participationBody: "紐約證交所及納斯達克均呈現約三分之二下跌、三分之一上漲的結構。", riskTitle: "風險訊號：內部偏弱", riskBody: "廣度與成交量同步走弱，支持『風格分化』而非單純指數雜訊的判讀。", sectorTitle: "板塊交叉檢查", sectorBody: "標普 500 十一個主要板塊中，能源是唯一上升者（+0.87%）。", chartNote: "比率並非直接的交易所總家數；此圖把每 1 隻上漲股對應的下跌股比例標準化為 100% 參與度。", sourceNote: "資料：Reuters 8 月 17 日美股收市；成交量 147.4 億股，20 日均量 169.5 億股。" },
+  CN: {
+    compositionTitle: "交易所参与度", compositionDescription: "根据上涨／下跌家数比例换算为相对参与度；金色代表上涨、珊瑚色代表下跌。", advances: "上涨", declines: "下跌", volumeTitle: "成交量参与度", volumeActual: "当日全美成交量", volumeAverage: "20 日平均成交量", volumeDelta: "较 20 日均量少 2.21 亿股", participationTitle: "63.3% 平均为下跌股", participationBody: "纽约证交所及纳斯达克均呈现约三分之二下跌、三分之一上涨的结构。", riskTitle: "风险信号：内部偏弱", riskBody: "广度与成交量同步走弱，支持“风格分化”而非单纯指数噪音的判断。", sectorTitle: "板块交叉检查", sectorBody: "标普 500 十一个主要板块中，能源是唯一上涨者（+0.87%）。", chartNote: "比率并非直接的交易所总家数；此图把每 1 只上涨股对应的下跌股比例标准化为 100% 参与度。", sourceNote: "数据：Reuters 8 月 17 日美股收盘；成交量 147.4 亿股，20 日均量 169.5 亿股。" },
+  EN: {
+    compositionTitle: "Exchange participation", compositionDescription: "Relative participation translated from advance/decline ratios; gold is advancing, coral is declining.", advances: "Advancing", declines: "Declining", volumeTitle: "Volume participation", volumeActual: "Total U.S. volume", volumeAverage: "20-day average volume", volumeDelta: "2.21bn shares below the 20-day average", participationTitle: "63.3% average decliners", participationBody: "Both NYSE and Nasdaq showed roughly two decliners for every one advancer in the session.", riskTitle: "Risk flag: weak internals", riskBody: "Breadth and volume softened together, supporting a style-split read rather than simple index noise.", sectorTitle: "Sector cross-check", sectorBody: "Energy was the only S&P 500 sector higher among the eleven major sectors (+0.87%).", chartNote: "Ratios are not exchange totals; the chart normalises the number of decliners per advancer to 100% participation.", sourceNote: "Data: Reuters, U.S. close 17 Aug; 14.74bn shares versus a 16.95bn 20-day average." },
+};
 
 const ui: Record<Language, Ui> = {
   TW: {

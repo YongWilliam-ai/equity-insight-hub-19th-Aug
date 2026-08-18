@@ -43,7 +43,12 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .section-kicker { font-family: "IBM Plex Mono", "Noto Sans TC", monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.19em; text-transform: uppercase; color: #9B7739; }
 .section-title { margin: 0; max-width: 680px; font-family: "DM Serif Display", "Noto Sans TC", serif; font-size: clamp(2.15rem, 4vw, 3.75rem); line-height: 0.98; letter-spacing: -0.04em; color: #16352F; }
 .market-stat:last-child { border-right: 0; }
-.signal-file-tab { writing-mode: vertical-rl; transform: rotate(180deg); min-height: 76px; }
+.signal-file-tab { writing-mode: horizontal-tb; min-height: 52px; line-height: 1.35; }
+.breadth-metric { display: flex; min-width: 0; flex-direction: column; gap: 0.25rem; border-left: 1px solid rgba(224, 194, 123, 0.45); padding-left: 0.7rem; color: #D5DDD7; font-size: 0.68rem; line-height: 1.2; }
+.breadth-metric svg { color: #E0C27B; }
+.breadth-metric strong { color: #FFF7E7; font-family: "DM Serif Display", "Noto Sans TC", serif; font-size: 1.65rem; font-weight: 400; letter-spacing: -0.04em; }
+.market-reading-card { display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; border-bottom: 1px solid #D4C9B8; padding-bottom: 1rem; color: #69756F; font-size: 0.875rem; line-height: 1.6; }
+.market-reading-card p:last-child { margin-top: 0.18rem; }
 
 @media (prefers-reduced-motion: no-preference) {
   .market-stat, button, a { transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1); }
