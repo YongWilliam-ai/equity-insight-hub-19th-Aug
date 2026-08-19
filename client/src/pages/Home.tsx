@@ -1,140 +1,90 @@
 /**
- * The Market Ledger page — all visible copy is selected from the active language pack.
+ * BIT Daily Market Intelligence — 2026-08-19
+ * Contemporary financial editorial: deep ink, warm paper, brass evidence marks.
+ * Every data point below is limited to the verified 18 Aug U.S. close / official-event fact set.
  */
-import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  Activity, ArrowRight, ArrowUpRight, BarChart3, BookOpenText, ChevronRight,
-  CircleAlert, Clock3, Filter, Gauge, Menu, Search, ShieldCheck, Sparkles,
-  TrendingDown, TrendingUp, X,
-} from "lucide-react";
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import {
-  breadthData, breadthDetailContent, breadthMetrics, getMarketContent,
-  type Direction, type Language, type MarketSignal, type ViewMode,
-} from "@/lib/marketData";
+import { ArrowRight, ArrowUpRight, CalendarDays, ChevronRight, CircleAlert, Clock3, FileArchive, Landmark, Layers3, ShieldCheck, TrendingDown, TrendingUp } from "lucide-react";
 
 const heroImage = "/manus-storage/equity-insight-hero_91085892.jpg";
-const aiImage = "/manus-storage/ai-hardware-signal_7525933e.jpg";
-const macroImage = "/manus-storage/macro-risk-paper_a963f5ef.jpg";
 const markImage = "/manus-storage/equity-insight-mark_57c970d0.png";
 
-function DirectionIcon({ direction }: { direction: Direction }) {
-  if (direction === "up") return <TrendingUp size={15} />;
-  if (direction === "down") return <TrendingDown size={15} />;
-  return <ArrowUpRight size={15} />;
+const sources = [
+  ["[1] Reuters｜美股收市、广度与半导体", "https://www.reuters.com/business/us-stock-futures-drop-fading-iran-peace-hopes-lift-oil-bond-yields-2026-08-18/"],
+  ["[2] Home Depot IR｜Q2 FY2026业绩", "https://ir.homedepot.com/news-releases/2026/08-18-2026-110040463"],
+  ["[3] Yahoo Finance｜利率、原油与加密资产快照", "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-august-18-dow-sp-500-nasdaq-080822735.html"],
+  ["[4] HKEX / Kuaishou IR｜业绩日程", "https://www.hkexgroup.com/Investor-Relations?sc_lang=zh-HK"],
+  ["[5] Federal Reserve｜8月日历", "https://www.federalreserve.gov/newsevents/2026-august.htm"],
+];
+
+function SectionKicker({ children }: { children: React.ReactNode }) {
+  return <p className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-[#9A7230]">{children}</p>;
 }
 
 export default function Home() {
-  const [language, setLanguage] = useState<Language>(() => {
-    const lang = new URLSearchParams(window.location.search).get("lang");
-    return lang === "CN" || lang === "EN" ? lang : "TW";
-  });
-  const [viewMode, setViewMode] = useState<ViewMode>("analysis");
-  const [activeCategory, setActiveCategory] = useState("ALL");
-  const [query, setQuery] = useState("");
-  const [selectedId, setSelectedId] = useState(1);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-
-  const { copy, signals, premarketRows, marketStats, sources } = getMarketContent(language);
-  const breadth = breadthDetailContent[language];
-  const isEducation = viewMode === "education";
-  const selectedSignal = signals.find((signal) => signal.id === selectedId) ?? signals[0];
-  const languageNames: Record<Language, [string, string, string]> = {
-    TW: ["繁中", "簡中", "英文"],
-    CN: ["繁体", "简体", "英文"],
-    EN: ["Traditional Chinese", "Simplified Chinese", "English"],
-  };
-  const sourceNames: Record<Language, [string, string, string, string]> = {
-    TW: ["路透社", "富途研究摘要", "聯邦儲備局日曆", "家得寶投資人關係"],
-    CN: ["路透社", "富途研究摘要", "美联储日历", "家得宝投资者关系"],
-    EN: ["Reuters", "Futunn research brief", "Federal Reserve calendar", "Home Depot investor relations"],
-  };
-  const indexLabels: Record<Language, [string, string, string, string]> = {
-    TW: ["標普 500", "納斯達克", "道瓊", "波動率指數"],
-    CN: ["标普 500", "纳斯达克", "道指", "波动率指数"],
-    EN: ["S&P 500", "NASDAQ", "DOW", "VIX"],
-  };
-  const categoryEntries = [
-    ["ALL", copy.allSignals],
-    ["MACRO", copy.categories[1]],
-    ["AI", copy.categories[2]],
-    ["CONSUMER", copy.categories[3]],
-    ["CROSS", copy.categories[4]],
-  ] as const;
-  const categoryFor = (id: string) => ({
-    ALL: "", MACRO: copy.categories[1], AI: copy.categories[2],
-    CONSUMER: copy.categories[3], CROSS: copy.categories[4],
-  }[id] ?? "");
-  const visibleSignals = useMemo(() => {
-    const normalized = query.trim().toLowerCase();
-    return signals.filter((signal) => {
-      const categoryMatch = activeCategory === "ALL" || signal.category === categoryFor(activeCategory);
-      const text = [signal.signal, signal.thesis, signal.lesson, signal.watch, signal.category].join(" ").toLowerCase();
-      return categoryMatch && (!normalized || text.includes(normalized));
-    });
-  }, [activeCategory, query, signals, language]);
-
-  useEffect(() => {
-    document.documentElement.lang = language === "TW" ? "zh-Hant" : language === "CN" ? "zh-Hans" : "en";
-    document.title = `${copy.brandTop} ${copy.brandBottom} — ${copy.researchEdition}`;
-  }, [language, copy.brandTop, copy.brandBottom, copy.researchEdition]);
-
-  const jumpTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setMobileNavOpen(false);
-  };
-  const switchLanguage = (next: Language) => {
-    setLanguage(next);
-    const url = new URL(window.location.href);
-    url.searchParams.set("lang", next);
-    window.history.replaceState({}, "", url);
-    setActiveCategory("ALL");
-    setSelectedId(1);
-    setQuery("");
-  };
-
   return (
-    <div className="min-h-screen bg-[#F3EFE6] text-[#16352F] lg:flex">
-      <aside className="ledger-spine sticky top-0 z-40 hidden h-screen w-[236px] flex-col border-r border-[#E4DBC9] bg-[#10332D] px-6 py-7 text-[#F6F0E3] lg:flex">
-        <button className="flex items-center gap-3 text-left" onClick={() => jumpTo("overview")} aria-label={copy.openOverview}>
-          <img src={markImage} alt="" className="h-11 w-11 object-contain" />
-          <span className="leading-none"><span className="block font-display text-[18px] tracking-tight">{copy.brandTop}</span><span className="mt-1 block font-mono text-[10px] tracking-[0.22em] text-[#C99A48]">{copy.brandBottom}</span></span>
-        </button>
-        <div className="mt-14 border-l border-[#C99A48]/60 pl-4"><p className="font-mono text-[10px] tracking-[0.22em] text-[#C99A48]">{copy.edition}</p><p className="mt-3 whitespace-pre-line font-display text-[22px] leading-tight">{copy.sidebarThesis}</p></div>
-        <nav className="mt-12 space-y-2" aria-label={copy.nav.join(" / ")}>
-          {copy.nav.map((label, index) => <button key={label} onClick={() => jumpTo(["overview", "signals", "premarket", "sources"][index])} className="group flex w-full items-center gap-3 border-b border-white/10 py-3 text-left text-sm text-[#EAE3D5] transition hover:border-[#C99A48] hover:text-white"><span className="font-mono text-[10px] text-[#C99A48]">{String(index + 1).padStart(2, "0")}</span><span>{label}</span><ChevronRight size={14} className="ml-auto opacity-0 transition group-hover:opacity-100" /></button>)}
-        </nav>
-        <div className="mt-auto space-y-4"><div className="border border-white/15 bg-white/[0.04] p-4"><div className="flex items-center gap-2 text-[#C99A48]"><ShieldCheck size={15} /><span className="font-mono text-[10px] tracking-[0.16em]">{copy.sourceAware}</span></div><p className="mt-2 text-xs leading-relaxed text-[#D5CEBF]">{copy.sourceNote}</p></div><p className="font-mono text-[9px] tracking-[0.14em] text-[#91A69F]">{copy.asOf}</p></div>
+    <main className="min-h-screen bg-[#F3EFE6] text-[#17372F] lg:flex">
+      <aside className="sticky top-0 z-40 hidden h-screen w-[230px] flex-col border-r border-[#E2D5C1] bg-[#10342D] px-6 py-7 text-[#F7F0E3] lg:flex">
+        <a href="#top" className="flex items-center gap-3"><img src={markImage} alt="EQUITY INSIGHT" className="h-10 w-10 object-contain" /><span><strong className="block font-display text-[18px] leading-none">EQUITY</strong><strong className="block mt-0.5 font-display text-[18px] leading-none text-[#E1C47D]">INSIGHT</strong></span></a>
+        <div className="mt-12 border-l border-[#D4AB5D] pl-4"><p className="font-mono text-[10px] tracking-[0.18em] text-[#D4AB5D]">BIT DAILY / 2026.08.19</p><p className="mt-3 font-display text-[22px] leading-tight">资金价格，<br />重回定价中心。</p></div>
+        <nav className="mt-10 space-y-1" aria-label="BIT report index">{[["01", "60秒结论", "brief"], ["02", "市场仪表盘", "market"], ["03", "企业与跨市场", "companies"], ["04", "今天要看什么", "watch"], ["05", "来源与限制", "sources"]].map(([number, label, target]) => <a key={target} href={`#${target}`} className="group flex items-center gap-3 border-b border-white/10 py-3 text-sm text-[#DCE3DB] transition hover:border-[#D4AB5D] hover:text-white"><span className="font-mono text-[10px] text-[#D4AB5D]">{number}</span><span>{label}</span><ChevronRight size={14} className="ml-auto opacity-0 transition group-hover:opacity-100" /></a>)}</nav>
+        <div className="mt-auto border border-white/15 bg-white/[0.04] p-4"><p className="font-mono text-[9px] tracking-[0.16em] text-[#D4AB5D]">RESEARCH / NOT ADVICE</p><p className="mt-2 text-xs leading-5 text-[#CFD8D0]">收市事实、官方事件与分析判断分层呈现；点击来源可追溯。</p></div>
       </aside>
-
       <div className="min-w-0 flex-1">
-        <header className="sticky top-0 z-30 border-b border-[#E4DBC9] bg-[#F3EFE6]/95 px-5 py-3 backdrop-blur lg:px-10"><div className="mx-auto flex max-w-[1500px] items-center justify-between gap-3"><button className="flex items-center gap-2 lg:hidden" onClick={() => setMobileNavOpen(true)} aria-label={copy.openNav}><Menu size={21} /><img src={markImage} alt="" className="h-7 w-7 object-contain" /></button><div className="hidden items-center gap-3 text-[11px] font-medium tracking-[0.14em] text-[#50615B] sm:flex"><span className="status-dot" /><span>{copy.locale}</span><span className="text-[#B6A997]">•</span><span>{copy.researchEdition}</span></div><div className="ml-auto flex items-center gap-1 rounded-full border border-[#DED4C2] bg-[#FAF7F0] p-1" role="group" aria-label={copy.languageSwitcher}>{(["TW", "CN", "EN"] as Language[]).map((option, index) => <button key={option} onClick={() => switchLanguage(option)} className={`rounded-full px-2.5 py-1 text-[10px] font-bold transition ${language === option ? "bg-[#16352F] text-white" : "text-[#66746E] hover:text-[#16352F]"}`}>{languageNames[language][index]}</button>)}</div></div></header>
+      <header className="sticky top-0 z-30 border-b border-[#DED3C2] bg-[#F3EFE6]/95 px-5 py-3 backdrop-blur sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+          <a href="#top" className="flex items-center gap-3"><img src={markImage} alt="EQUITY INSIGHT" className="h-9 w-9 object-contain" /><span><strong className="block font-display text-[16px] leading-none">EQUITY / <em className="font-normal text-[#9A7230]">INSIGHT</em></strong><span className="font-mono text-[9px] tracking-[0.17em] text-[#9A7230]">BIT DAILY INTELLIGENCE</span></span></a>
+          <div className="hidden items-center gap-3 font-mono text-[10px] tracking-[0.12em] text-[#66766E] sm:flex"><span className="h-2 w-2 rounded-full bg-[#4E9377]" /> 简体中文主报告 <span className="text-[#B8AA95]">·</span> 2026.08.19</div>
+          <a href="/archive/2026-08-18" className="group inline-flex items-center gap-2 border border-[#D4C5AE] px-3 py-2 text-xs font-bold text-[#34544B] transition hover:border-[#A8782F] hover:text-[#9A7230]"><FileArchive size={15} /> 昨日归档 <ChevronRight size={14} className="transition group-hover:translate-x-0.5" /></a>
+        </div>
+      </header>
 
-        <AnimatePresence>{mobileNavOpen && <motion.div className="fixed inset-0 z-50 bg-[#10332D] p-6 text-[#F6F0E3] lg:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><div className="flex items-center justify-between"><div className="flex items-center gap-3"><img src={markImage} alt="" className="h-10 w-10" /><span className="font-display text-xl">{copy.brandTop} / {copy.brandBottom}</span></div><button onClick={() => setMobileNavOpen(false)} aria-label={copy.closeNav}><X size={24} /></button></div><div className="mt-14 space-y-4">{copy.nav.map((label, index) => <button key={label} onClick={() => jumpTo(["overview", "signals", "premarket", "sources"][index])} className="flex w-full items-center gap-4 border-b border-white/15 py-4 text-left"><span className="font-mono text-xs text-[#C99A48]">{String(index + 1).padStart(2, "0")}</span><span className="text-xl">{label}</span><ArrowRight className="ml-auto" size={17} /></button>)}</div></motion.div>}</AnimatePresence>
+      <section id="top" className="relative overflow-hidden bg-[#10342D] px-5 py-16 sm:px-8 lg:px-12">
+        <img src={heroImage} alt="市场研究桌面" className="absolute inset-0 h-full w-full object-cover opacity-30" /><div className="absolute inset-0 bg-[#0E302A]/70" />
+        <div className="relative mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
+          <div><div className="flex flex-wrap items-center gap-3"><span className="h-px w-10 bg-[#D4AB5D]" /><span className="font-mono text-[10px] tracking-[0.22em] text-[#E4C985]">18 AUG U.S. CLOSE / 19 AUG HKT WATCH</span></div><h1 className="mt-6 max-w-4xl font-display text-[48px] leading-[.94] tracking-[-.045em] text-[#FBF5E7] sm:text-[67px]">市场正在重估的，<br /><em className="font-normal text-[#E1C47D]">不是 AI 需求，</em>而是资金价格。</h1><p className="mt-6 max-w-2xl text-[16px] leading-7 text-[#E0E5DD]">油价与长端收益率同时偏高，先压缩了高估值硬件链的估值与仓位容忍度。需求没有被单日价格动作否定，但下一份业绩和下一次利率信号将决定这是不是一次普通的重置。</p></div>
+          <div className="border-l border-[#D4AB5D] bg-[#0A2722]/75 p-6 backdrop-blur-sm"><SectionKicker>数据切点</SectionKicker><p className="mt-3 text-sm leading-6 text-[#E7E4DB]">美股数据为 8月18日收市；港股只引用来源明确标注时间的延迟报价或官方日程。不同时间点不会合并为“当前价格”。</p><a href="#sources" className="mt-5 inline-flex items-center gap-2 text-xs font-bold text-[#E4C985] hover:text-white">查看来源与置信度 <ArrowRight size={14} /></a></div>
+        </div>
+      </section>
 
-        <main>
-          <section id="overview" className="relative min-h-[610px] overflow-hidden bg-[#102D28]"><img src={heroImage} alt={copy.imageAltHero} className="absolute inset-0 h-full w-full object-cover opacity-65" /><div className="absolute inset-0 bg-[#10332D]/64" /><div className="absolute right-7 top-7 z-10 hidden items-center gap-3 border-l border-[#C99A48] bg-[#10332D]/65 px-4 py-3 backdrop-blur-sm sm:flex"><img src={markImage} alt="" className="h-9 w-9 object-contain" /><span><span className="block font-display text-[18px] leading-none tracking-tight text-[#FFF9ED]">{copy.brandTop} / {copy.brandBottom}</span><span className="mt-1 block font-mono text-[9px] tracking-[0.2em] text-[#E0C27B]">{copy.researchEdition}</span></span></div><div className="relative mx-auto flex min-h-[610px] max-w-[1500px] flex-col justify-end px-5 py-14 sm:px-10 lg:px-14"><motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="max-w-4xl"><div className="mb-6 flex flex-wrap items-center gap-3"><span className="ledger-rule" /><span className="font-mono text-[10px] tracking-[0.24em] text-[#E0C27B]">{copy.heroLedger}</span><span className="border border-[#E0C27B]/45 px-2 py-1 font-mono text-[9px] tracking-[0.14em] text-[#F4E4B8]">{copy.heroDataCut}</span></div><p className="max-w-xl font-mono text-[11px] tracking-[0.16em] text-[#D7D1C1]">{copy.heroStrap}</p><h1 className="mt-5 max-w-4xl font-display text-[45px] leading-[0.93] tracking-[-0.045em] text-[#FFF9ED] sm:text-[66px] lg:text-[82px]">{copy.heroTitleA}<br /><em className="font-normal text-[#E0C27B]">{copy.heroTitleEm}</em> {copy.heroTitleB}</h1><p className="mt-7 max-w-2xl text-[15px] leading-7 text-[#E6DFD1] sm:text-[17px]">{copy.heroDescription}</p><div className="mt-9 flex flex-wrap items-center gap-3"><button onClick={() => jumpTo("signals")} className="group inline-flex items-center gap-2 bg-[#C99A48] px-5 py-3 text-xs font-bold text-[#17342F] transition hover:bg-[#E0C27B] active:scale-[0.97]">{copy.openDesk}<ArrowRight size={15} className="transition group-hover:translate-x-1" /></button><button onClick={() => jumpTo("premarket")} className="inline-flex items-center gap-2 border border-white/30 px-5 py-3 text-xs font-bold text-white transition hover:border-white hover:bg-white/10 active:scale-[0.97]"><Clock3 size={15} />{copy.openPremarket}</button></div></motion.div></div></section>
+      <section id="brief" className="border-b border-[#DED3C2] bg-[#FBF7EE] px-5 py-9 sm:px-8 lg:px-12"><div className="mx-auto max-w-7xl"><SectionKicker>01 / 给上司的 60 秒版本</SectionKicker><div className="mt-5 grid gap-4 lg:grid-cols-3">
+        {[
+          ["01", "宏观", "收益率与油价同时变贵", "10年期约4.70%，30年期仍接近19年高位；WTI约US$84.9。高贴现率与通胀不确定性重新成为成长股的共同约束。", Landmark],
+          ["02", "AI / 科技", "硬件回撤先反映估值与仓位", "SOX约-5%，Micron -7%、SanDisk -9%、Nvidia -2.3%。目前证据不足以把价格回调直接解释为需求崩塌。", Layers3],
+          ["03", "消费 / 港股", "微观改善仍未消除宏观谨慎", "Home Depot数据改善但未上调全年指引；香港今日进入业绩密集期，港交所、快手、恒瑞、阿里均是事件驱动。", CalendarDays],
+        ].map(([num, label, title, body, Icon]) => <article key={num as string} className="border-l-2 border-[#D4AB5D] bg-[#F3EEE3] p-5"><div className="flex items-center justify-between"><span className="font-mono text-[10px] text-[#9A7230]">{num as string}</span><Icon size={17} className="text-[#557A6C]" /></div><p className="mt-3 text-xs font-bold tracking-[0.12em] text-[#547067]">{label as string}</p><h2 className="mt-2 font-display text-[27px] leading-tight">{title as string}</h2><p className="mt-3 text-sm leading-6 text-[#68756F]">{body as string} <sup className="font-mono text-[#9A7230]">[1][2][3][4]</sup></p></article>)}
+      </div></div></section>
 
-          <section className="border-b border-[#E4DBC9] bg-[#FAF7F0] px-5 py-7 sm:px-10 lg:px-14"><div className="mx-auto grid max-w-[1500px] gap-5 xl:grid-cols-[1.15fr_2fr] xl:items-center"><div className="border-l-2 border-[#C99A48] pl-4"><p className="font-mono text-[10px] tracking-[0.2em] text-[#897A67]">{copy.thesisLabel}</p><p className="mt-1 font-display text-[25px] leading-tight text-[#15352F]">{copy.thesis}</p></div><div className="grid gap-3 sm:grid-cols-3">{copy.keyPoints.map((point, index) => <div key={point} className="border-l border-[#DED4C2] pl-4"><span className="font-mono text-[10px] text-[#C99A48]">{String(index + 1).padStart(2, "0")}</span><p className="mt-1 text-xs font-bold tracking-[0.12em] text-[#1C443B]">{point}</p><p className="mt-1 text-xs leading-5 text-[#68756F]">{copy.keyDescriptions[index]}</p></div>)}</div></div></section>
+      <section id="market" className="px-5 py-14 sm:px-8 lg:px-12"><div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.08fr_.92fr]">
+        <div><SectionKicker>市场仪表盘 / 已实现收盘</SectionKicker><h2 className="mt-3 font-display text-[40px] leading-tight">下跌有广度，<br />但尚非全面流动性事件。</h2><p className="mt-4 max-w-xl text-sm leading-7 text-[#68756F]">NYSE与Nasdaq的下跌家数都多于上涨家数，且成交量低于20日平均约12%。与此同时，医疗、必需消费与能源逆势走强，表明资金在做风格再定价，而不是无差别抛售。<sup className="font-mono text-[#9A7230]">[1]</sup></p>
+          <div className="mt-7 grid border-y border-[#DED3C2] sm:grid-cols-3"><Metric label="S&P 500" value="7,691.76" change="-0.69%" /><Metric label="NASDAQ" value="26,289.71" change="-1.33%" /><Metric label="DOW" value="53,343.40" change="-0.22%" /></div>
+        </div>
+        <div className="bg-[#183D35] p-7 text-[#F6F0E3]"><div className="flex items-center justify-between"><SectionKicker>风险传导</SectionKicker><TrendingDown size={20} className="text-[#E1C47D]" /></div><div className="mt-7 space-y-5"><Path step="01" title="地缘不确定性" body="谈判希望减弱，油价上行。" /><Path step="02" title="通胀与期限溢价" body="10年期收益率约4.70%，30年期仍处高位。" /><Path step="03" title="估值重估" body="远期现金流折现压力优先落在半导体、存储、光通信与AI基础设施。" /></div><p className="mt-7 border-t border-white/15 pt-4 text-xs leading-5 text-[#CBD6D0]">**确认条件：** 长端收益率回落、油价风险溢价收窄、AI供应链在业绩前出现稳定承接。<br />**推翻条件：** 30年期再上行并伴随油价持续走高，且回撤扩展至大型平台与信用敏感资产。</p></div>
+      </div></section>
 
-          <section className="px-5 py-14 sm:px-10 lg:px-14"><div className="mx-auto max-w-[1500px]"><div className="mb-8 flex flex-wrap items-end justify-between gap-3"><div><p className="section-kicker">{copy.snapshotKicker}</p><h2 className="section-title">{copy.snapshotTitle}</h2></div><p className="max-w-md text-sm leading-6 text-[#68756F]">{copy.snapshotDescription}</p></div><div className="grid border-y border-[#DCD1BE] sm:grid-cols-2 xl:grid-cols-4">{marketStats.map((stat, index) => <article key={stat.label} className="market-stat border-b border-[#DCD1BE] px-0 py-5 sm:border-b-0 sm:px-5 sm:not-last:border-r xl:first:pl-0"><div className="flex items-center justify-between"><p className="font-mono text-[11px] tracking-[0.12em] text-[#5D7169]">{indexLabels[language][index]}</p><span className={`text-[11px] font-bold ${stat.tone === "up" ? "text-[#387B63]" : "text-[#B95C4F]"}`}>{stat.change}</span></div><p className="mt-3 font-display text-[33px] tracking-[-0.04em] text-[#14332C]">{stat.value}</p><p className="mt-1 text-xs text-[#7A827E]">{stat.note}</p></article>)}</div></div></section>
+      <section id="companies" className="border-y border-[#DED3C2] bg-[#E8E0D3] px-5 py-14 sm:px-8 lg:px-12"><div className="mx-auto max-w-7xl"><div className="flex flex-wrap items-end justify-between gap-4"><div><SectionKicker>03 / 企业与跨市场</SectionKicker><h2 className="mt-3 font-display text-[40px] leading-tight">把“好业绩”与<br />“更高估值”分开看。</h2></div><p className="max-w-lg text-sm leading-7 text-[#68756F]">Home Depot提供了消费板块的一个实用案例；港股今日更适合围绕业绩和披露节奏建立观察，而非提前写结论。</p></div><div className="mt-8 grid gap-5 lg:grid-cols-2">
+        <article className="border-l-2 border-[#B86251] bg-[#F7F2E8] p-6"><p className="font-mono text-[10px] tracking-[0.16em] text-[#A34F40]">HOME DEPOT / 官方业绩</p><h3 className="mt-3 font-display text-[30px] leading-tight">数据超预期，全年指引未上调。</h3><p className="mt-4 text-sm leading-7 text-[#64716B]">Q2销售US$479亿（+5.7%）、同店销售+1.7%、调整后EPS US$4.92；公司维持全年指引，并指出燃料、能源及其他投入成本压力。这里的阅读重点不是“beat / miss”，而是结果改善与后半年谨慎能够同时成立。<sup className="font-mono text-[#9A7230]">[2]</sup></p></article>
+        <article className="border-l-2 border-[#557A6C] bg-[#F7F2E8] p-6"><p className="font-mono text-[10px] tracking-[0.16em] text-[#557A6C]">HONG KONG / 官方日程</p><h3 className="mt-3 font-display text-[30px] leading-tight">今天的核心是业绩披露，不是预设方向。</h3><p className="mt-4 text-sm leading-7 text-[#64716B]">港交所、快手、恒瑞、阿里等被列入8月19日的官方业绩日程。快手确认香港收市后披露Q2及中期业绩、19:00 HKT召开电话会；其IR页11:17 HKT的延迟报价为HK$38.20（-3.00%），仅作带时间戳的盘中参考。<sup className="font-mono text-[#9A7230]">[4]</sup></p></article>
+      </div></div></section>
 
-          <section className="border-y border-[#E2D8C6] bg-[#EAE4D8] px-5 py-14 sm:px-10 lg:px-14"><div className="mx-auto max-w-[1500px]"><div className="mb-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end"><div><p className="section-kicker">{copy.breadthKicker}</p><h2 className="section-title mt-3">{copy.breadthTitle}</h2></div><p className="max-w-2xl text-sm leading-7 text-[#68756F]">{copy.breadthDescription}</p></div><div className="grid gap-8 xl:grid-cols-[1.16fr_0.84fr]">
-            <div className="relative overflow-hidden bg-[#173A33] p-6 text-[#F8F1E3] sm:p-9"><img src={macroImage} alt={copy.imageAltMacro} className="absolute inset-0 h-full w-full object-cover opacity-20" /><div className="relative"><div className="flex flex-wrap items-start justify-between gap-4"><div><div className="flex items-center gap-2 text-[#E0C27B]"><BarChart3 size={16} /><span className="font-mono text-[10px] tracking-[0.16em]">{breadth.compositionTitle}</span></div><p className="mt-2 max-w-xl text-sm leading-6 text-[#D3D9D4]">{breadth.compositionDescription}</p></div><div className="flex gap-3 text-[10px] font-mono text-[#E4E0D6]"><span className="flex items-center gap-1.5"><i className="h-2 w-2 bg-[#C99A48]" />{breadth.advances}</span><span className="flex items-center gap-1.5"><i className="h-2 w-2 bg-[#D9826B]" />{breadth.declines}</span></div></div><div className="mt-7 h-[210px] border border-white/10 bg-[#0E2A25]/45 p-3"><ResponsiveContainer width="100%" height="100%"><BarChart data={breadthData} layout="vertical" margin={{ top: 6, right: 10, left: 4, bottom: 2 }} barCategoryGap="30%"><XAxis type="number" domain={[0, 100]} hide /><YAxis dataKey="market" type="category" width={54} tick={{ fill: "#E6E2D6", fontSize: 11, fontFamily: "IBM Plex Mono" }} axisLine={false} tickLine={false} /><Tooltip cursor={{ fill: "rgba(255,255,255,0.05)" }} contentStyle={{ background: "#14342D", border: "1px solid rgba(224,194,123,0.45)", borderRadius: 0, color: "#F8F1E3", fontSize: 12 }} formatter={(value: number, name: string) => [`${value.toFixed(1)}%`, name === "advance" ? breadth.advances : breadth.declines]} /><Bar dataKey="advance" stackId="participation" fill="#C99A48" barSize={34} /><Bar dataKey="decline" stackId="participation" fill="#D9826B" barSize={34} /></BarChart></ResponsiveContainer></div><div className="mt-5 grid gap-4 sm:grid-cols-3"><div className="breadth-metric"><Gauge size={17} /><span>{breadth.participationTitle}</span><strong>{breadthMetrics.averageDecline}%</strong></div><div className="breadth-metric"><Activity size={17} /><span>{breadth.volumeTitle}</span><strong>{breadthMetrics.volumeParticipation}%</strong></div><div className="breadth-metric"><TrendingUp size={17} /><span>{breadth.sectorTitle}</span><strong>+{breadthMetrics.energySectorMove}%</strong></div></div><div className="mt-6 grid gap-3 border-t border-white/15 pt-5 sm:grid-cols-[1fr_auto]"><div><p className="font-mono text-[10px] tracking-[0.14em] text-[#E0C27B]">{breadth.volumeTitle}</p><p className="mt-1 text-xs text-[#D5DDD7]">{breadth.volumeActual}: <strong className="font-semibold text-[#FFF7E7]">{breadthMetrics.actualVolume}</strong> · {breadth.volumeAverage}: <strong className="font-semibold text-[#FFF7E7]">{breadthMetrics.averageVolume}</strong></p></div><p className="font-mono text-[10px] tracking-[0.08em] text-[#D9826B]">{breadth.volumeDelta}</p></div><div className="mt-3 h-2 overflow-hidden bg-white/10"><div className="h-full bg-[#C99A48]" style={{ width: `${breadthMetrics.volumeParticipation}%` }} /></div><p className="mt-4 text-[10px] leading-5 text-[#AFBDB6]">{breadth.chartNote}</p><p className="mt-2 font-mono text-[9px] tracking-[0.08em] text-[#AABAB3]">{breadth.sourceNote}</p></div></div>
-            <div className="grid content-start gap-4 border-l border-[#C99A48] pl-6 sm:pl-8"><p className="section-kicker">{copy.whyKicker}</p><h3 className="font-display text-[31px] leading-tight">{copy.whyTitle}</h3><div className="market-reading-card"><CircleAlert size={18} className="text-[#B95C4F]" /><div><p className="font-bold text-[#173D35]">{breadth.riskTitle}</p><p>{breadth.riskBody}</p></div></div><div className="market-reading-card"><Gauge size={18} className="text-[#9B7739]" /><div><p className="font-bold text-[#173D35]">{breadth.participationTitle}</p><p>{breadth.participationBody}</p></div></div><div className="market-reading-card"><TrendingUp size={18} className="text-[#39785F]" /><div><p className="font-bold text-[#173D35]">{breadth.sectorTitle}</p><p>{breadth.sectorBody}</p></div></div><div className="mt-2 border-t border-[#D4C9B8] pt-5"><p className="font-mono text-[10px] tracking-[0.14em] text-[#9B7739]">{copy.breadthAxisLabel}</p><div className="mt-3 grid grid-cols-2 gap-3">{breadthData.map((item) => <div key={item.market} className="border-l border-[#C99A48] pl-3"><p className="font-mono text-[10px] text-[#688078]">{item.market}</p><p className="mt-1 font-display text-[27px] text-[#173D35]">{item.ratio}:1</p><p className="text-xs text-[#6A756F]">{breadth.declines} {item.decline}%</p></div>)}</div></div></div>
-          </div></div></section>
+      <section id="watch" className="px-5 py-14 sm:px-8 lg:px-12"><div className="mx-auto max-w-7xl"><SectionKicker>04 / 今天要看什么</SectionKicker><div className="mt-5 grid gap-0 border-t border-[#DED3C2] lg:grid-cols-4">{[
+        ["FOMC会议纪要", "8月19日 14:00 ET", "关注对通胀、油价与利率路径的表述；纪要不是即时政策行动。", "官方"],
+        ["港交所中期业绩", "8月19日", "看现货成交、衍生品、融资和非股票收入，而不只看盈利标题。", "官方"],
+        ["快手业绩", "香港收市后 / 19:00 HKT", "看广告、电商、AI投入与利润率是否能够同时成立。", "官方"],
+        ["Walmart Q2", "8月20日 06:00 CDT", "看交易量、客单、促销、毛利率与全年指引，补足Home Depot以外的消费读数。", "官方"],
+      ].map(([title, time, body, tag], index) => <article key={title} className="border-b border-[#DED3C2] py-5 lg:border-r lg:px-5 lg:first:pl-0"><span className="font-mono text-[10px] text-[#9A7230]">0{index + 1} / {tag}</span><h3 className="mt-3 font-display text-[25px]">{title}</h3><p className="mt-1 text-xs font-bold text-[#4D7164]">{time}</p><p className="mt-3 text-sm leading-6 text-[#68756F]">{body}</p></article>)}</div></div></section>
 
-          <section id="signals" className="px-5 py-16 sm:px-10 lg:px-14"><div className="mx-auto max-w-[1500px]"><div className="grid gap-7 lg:grid-cols-[0.82fr_1.18fr] lg:items-end"><div><p className="section-kicker">{copy.signalsKicker}</p><h2 className="section-title mt-3">{copy.signalsTitle}</h2></div><p className="max-w-2xl text-sm leading-7 text-[#68756F]">{copy.signalsDescription}</p></div><div className="mt-8 grid gap-7 xl:grid-cols-[1.12fr_0.88fr]"><div className="flex gap-0"><div className="hidden border-y border-l border-[#D7C6A7] bg-[#E7DED0] lg:flex lg:w-[112px] lg:flex-col lg:items-stretch">{categoryEntries.map(([id, label], index) => <button key={id} onClick={() => setActiveCategory(id)} className={`signal-file-tab border-b border-[#D7C6A7] px-3 py-3 text-left text-[10px] font-bold tracking-[0.08em] transition ${activeCategory === id ? "bg-[#153C34] text-[#F9F1E4]" : "text-[#627068] hover:bg-[#D5C29A] hover:text-[#153C34]"}`}><span className="mr-2 font-mono text-[9px] text-[#A47A34]">{String(index).padStart(2, "0")}</span><span>{label}</span></button>)}</div><div className="min-w-0 flex-1 lg:pl-5"><div className="flex flex-col gap-4 border-y border-[#DDD2C0] py-4 lg:flex-row lg:items-center lg:justify-between"><div className="relative flex-1"><Search className="absolute left-0 top-1/2 -translate-y-1/2 text-[#8B8A7C] size-[18px]" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.searchPlaceholder} className="w-full border-0 border-b border-[#CFC3B0] bg-transparent py-3 pl-7 pr-3 text-sm text-[#15372F] outline-none placeholder:text-[#9B9B90] focus:border-[#C99A48]" /></div><div className="flex items-center gap-2 text-[10px] font-mono tracking-[0.14em] text-[#847968]"><Filter size={14} />{visibleSignals.length} {copy.signalsLabel}</div></div><div className="mt-4 flex flex-wrap gap-0 border-l border-t border-[#D7C6A7] lg:hidden">{categoryEntries.map(([id, label]) => <button key={id} onClick={() => setActiveCategory(id)} className={`border-b border-r border-[#D7C6A7] px-3 py-2 text-[10px] font-bold tracking-[0.1em] transition active:scale-[0.97] ${activeCategory === id ? "bg-[#153C34] text-white" : "bg-[#ECE5D9] text-[#6C766F] hover:bg-[#D5C29A] hover:text-[#153C34]"}`}>{label}</button>)}</div><div className="mt-5 divide-y divide-[#E1D7C5] border-t border-[#E1D7C5]">{visibleSignals.map((signal: MarketSignal, index: number) => <motion.button key={signal.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.035 }} onClick={() => setSelectedId(signal.id)} className={`group grid w-full grid-cols-[34px_1fr_auto] gap-3 py-5 text-left transition ${selectedSignal.id === signal.id ? "bg-[#EBE5D9] px-3" : "hover:bg-[#F0EBE0] hover:px-3"}`}><span className="font-mono text-xs text-[#C99A48]">{String(signal.id).padStart(2, "0")}</span><span><span className="flex flex-wrap items-center gap-2"><span className="text-[10px] font-bold tracking-[0.14em] text-[#658078]">{signal.category}</span><span className="text-[11px] text-[#887C69]">{signal.move}</span><span className="text-[9px] font-mono tracking-[0.12em] text-[#A47A34]">{isEducation ? copy.learningLens : copy.analystLens}</span></span><span className="mt-1 block font-display text-[22px] leading-tight text-[#16382F]">{isEducation ? `${copy.howToRead} ${signal.signal}` : signal.signal}</span><span className="mt-2 block max-w-xl text-sm leading-6 text-[#6A756F]">{isEducation ? signal.lesson : signal.thesis}</span></span><span className={`mt-1 flex h-7 w-7 items-center justify-center rounded-full border ${signal.direction === "up" ? "border-[#94B5A4] text-[#39775F]" : signal.direction === "down" ? "border-[#D4AAA2] text-[#AF584D]" : "border-[#D6C49D] text-[#9D7733]"}`}><DirectionIcon direction={signal.direction} /></span></motion.button>)}{visibleSignals.length === 0 && <div className="py-12 text-center text-sm text-[#7A827E]">{copy.emptySignals}</div>}</div></div></div><div className="relative min-h-[490px] overflow-hidden bg-[#153A32] p-7 text-[#F7F0E3] sm:p-9"><img src={selectedSignal.category === copy.categories[2] ? aiImage : macroImage} alt={copy.imageAltResearch} className="absolute inset-0 h-full w-full object-cover opacity-20" /><div className="relative flex h-full flex-col"><div className="flex items-center justify-between border-b border-white/15 pb-4"><span className="font-mono text-[10px] tracking-[0.2em] text-[#E0C27B]">{isEducation ? copy.teachingNote : copy.researchDrawer}</span><Sparkles size={17} className="text-[#E0C27B]" /></div><AnimatePresence mode="wait"><motion.div key={`${selectedSignal.id}-${viewMode}-${language}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.2 }} className="flex h-full flex-1 flex-col"><p className="mt-7 text-[10px] font-bold tracking-[0.18em] text-[#9DB8AD]">{selectedSignal.category} / {selectedSignal.move}</p><h3 className="mt-2 font-display text-[38px] leading-[0.96] tracking-[-0.03em]">{isEducation ? `${copy.whyItMatters} ${selectedSignal.signal}` : selectedSignal.signal}</h3><p className="mt-6 text-[15px] leading-7 text-[#E0E6DE]">{isEducation ? `${selectedSignal.lesson} ${selectedSignal.detail}` : selectedSignal.detail}</p><div className={`mt-auto border-l bg-black/10 pl-4 pt-7 ${isEducation ? "border-[#A4C2B3]" : "border-[#C99A48]"}`}><p className="font-mono text-[10px] tracking-[0.18em] text-[#E0C27B]">{isEducation ? copy.nextRead : copy.invalidates}</p><p className="mt-2 text-sm leading-6 text-[#F0E7D8]">{isEducation ? selectedSignal.watch : selectedSignal.invalidation}</p></div></motion.div></AnimatePresence></div></div></div></div></section>
+      <section id="sources" className="border-y border-[#D8CBB7] bg-[#11362F] px-5 py-12 text-[#F5EFE4] sm:px-8 lg:px-12"><div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.75fr_1.25fr]"><div><SectionKicker>来源、置信度与限制</SectionKicker><h2 className="mt-3 font-display text-[36px] leading-tight">事实先于叙事。</h2><p className="mt-4 text-sm leading-7 text-[#D3DDD6]">核心数字优先使用Reuters、公司IR、联储与港交所。富途与TechFlow已完整阅读，用于线索和叙事交叉检查；其中未经原始披露完整确认的OpenAI、Anthropic、AI信贷与券商二手评论，没有被写成核心事实结论。</p><div className="mt-6 border-l border-[#D4AB5D] pl-4 text-sm leading-6 text-[#E8DDBE]"><CircleAlert className="mb-2" size={17} />指定的昨日DOCX未在本次工作区出现。本站对“昨日框架”的比较仅使用本地前日母稿作暂代参考，不能视为完整DOCX审计。</div></div><div className="grid border-t border-white/15 sm:grid-cols-2">{sources.map(([name, href]) => <a key={name} href={href} target="_blank" rel="noreferrer" className="group flex items-center justify-between border-b border-white/15 py-4 text-sm text-[#E9E4D8] transition hover:text-[#E1C47D] sm:odd:pr-6 sm:even:pl-6"><span>{name}</span><ArrowUpRight size={16} className="transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></a>)}</div></div></section>
 
-          <section id="premarket" className="overflow-hidden border-y border-[#E1D7C5] bg-[#F9F5EB] px-5 py-16 sm:px-10 lg:px-14"><div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[0.76fr_1.24fr]"><div><p className="section-kicker">{copy.premarketKicker}</p><h2 className="section-title mt-3">{isEducation ? copy.premarketEducationTitle : copy.premarketAnalysisTitle}</h2><p className="mt-5 max-w-md text-sm leading-7 text-[#68756F]">{isEducation ? copy.premarketEducationDescription : copy.premarketAnalysisDescription}</p><div className="mt-8 inline-flex border border-[#D8CCB7] p-1" role="group" aria-label={copy.readingMode}>{(["education", "analysis"] as ViewMode[]).map((mode) => <button key={mode} onClick={() => setViewMode(mode)} className={`px-4 py-2 text-xs font-bold transition ${viewMode === mode ? "bg-[#16382F] text-white" : "text-[#6A756F]"}`}>{mode === "education" ? copy.education : copy.analysis}</button>)}</div></div><div className="divide-y divide-[#DED3C2] border-t border-[#DED3C2]">{premarketRows.map((row, index) => <article key={row.event} className="grid gap-3 py-5 sm:grid-cols-[140px_1fr_1fr] sm:gap-6"><div><p className="font-mono text-[10px] text-[#C99A48]">{String(index + 1).padStart(2, "0")}</p><p className="mt-1 font-display text-xl">{row.event}</p><p className="mt-1 text-[11px] text-[#799087]">{row.exposure}</p></div>{isEducation ? <><div><p className="text-[10px] font-bold tracking-[0.14em] text-[#39785F]">{copy.observe}</p><p className="mt-2 text-sm leading-6 text-[#4F625B]">{row.educationObserve}</p></div><div><p className="text-[10px] font-bold tracking-[0.14em] text-[#AD5E52]">{copy.shortcut}</p><p className="mt-2 text-sm leading-6 text-[#4F625B]">{row.educationMistake}</p></div></> : <><div><p className="text-[10px] font-bold tracking-[0.14em] text-[#39785F]">{copy.positive}</p><p className="mt-2 text-sm leading-6 text-[#4F625B]">{row.analysisPositive}</p></div><div><p className="text-[10px] font-bold tracking-[0.14em] text-[#AD5E52]">{copy.negative}</p><p className="mt-2 text-sm leading-6 text-[#4F625B]">{row.analysisNegative}</p></div></>}</article>)}</div></div></section>
-
-          <section className="bg-[#10342D] px-5 py-14 text-[#F7F0E3] sm:px-10 lg:px-14"><div className="mx-auto grid max-w-[1500px] gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end"><div><p className="section-kicker text-[#E0C27B]">{isEducation ? copy.learningMode : copy.researchMode}</p><h2 className="mt-3 max-w-3xl font-display text-[38px] leading-[1.02] sm:text-[50px]">{isEducation ? copy.learningTitle : copy.researchTitle}</h2><p className="mt-5 max-w-2xl text-sm leading-7 text-[#D0DBD4]">{isEducation ? copy.learningBody : copy.researchBody}</p></div><div className="border-l border-[#C99A48] bg-white/[0.04] p-6"><div className="flex items-center gap-2 text-[#E0C27B]"><BookOpenText size={17} /><span className="font-mono text-[10px] tracking-[0.16em]">{isEducation ? copy.readingStandard : copy.briefingStandard}</span></div><p className="mt-4 font-display text-[27px] leading-tight">{isEducation ? copy.learningQuote : copy.researchQuote}</p><p className="mt-4 text-sm leading-6 text-[#C5D0C9]">{isEducation ? copy.learningStandardBody : copy.researchStandardBody}</p></div></div></section>
-
-          <section id="sources" className="relative overflow-hidden px-5 py-12 sm:px-10 lg:px-14"><div className="absolute left-0 top-0 h-full w-1 bg-[#C99A48]" /><div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[0.9fr_1.1fr]"><div><div className="flex items-center gap-3"><span className="ledger-rule" /><p className="font-mono text-[10px] tracking-[0.17em] text-[#9B7739]">{copy.sourcesKicker}</p></div><h2 className="section-title mt-4">{copy.sourcesTitle}</h2><p className="mt-5 max-w-lg text-sm leading-7 text-[#68756F]">{copy.sourcesBody}</p><p className="mt-6 font-mono text-[10px] tracking-[0.12em] text-[#7A6B57]">{copy.sourcesCut}</p></div><div className="grid gap-0 border-t border-[#DED3C2] sm:grid-cols-2">{sources.map((source, index) => <a key={source.label} href={source.href} target="_blank" rel="noreferrer" className="group flex items-center justify-between border-b border-[#DED3C2] py-4 text-sm font-medium text-[#184039] transition hover:text-[#AF7A2A] sm:odd:pr-6 sm:even:pl-6"><span>{sourceNames[language][index]}</span><ArrowUpRight size={16} className="transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></a>)}</div></div></section>
-        </main>
-        <footer className="border-t border-[#E0D5C3] bg-[#F3EFE6] px-5 py-7 sm:px-10 lg:px-14"><div className="mx-auto flex max-w-[1500px] flex-col justify-between gap-4 text-xs text-[#6D7871] sm:flex-row"><p>{copy.footerLeft}</p><p className="max-w-xl text-left sm:text-right">{copy.footerRight}</p></div></footer>
+      <footer className="px-5 py-7 text-xs text-[#67736D] sm:px-8 lg:px-12"><div className="mx-auto flex max-w-7xl flex-col gap-3 sm:flex-row sm:justify-between"><p>EQUITY / INSIGHT · BIT Daily Intelligence · 2026.08.19</p><p>本文仅为研究与分析，不构成个性化投资建议、买卖建议或收益承诺。</p></div></footer>
       </div>
-    </div>
+    </main>
   );
+}
+
+function Metric({ label, value, change }: { label: string; value: string; change: string }) {
+  return <div className="border-b border-[#DED3C2] py-5 sm:border-b-0 sm:border-r sm:px-5 sm:first:pl-0"><p className="font-mono text-[10px] tracking-[0.14em] text-[#66766E]">{label}</p><p className="mt-2 font-display text-[32px] tracking-[-.04em]">{value}</p><p className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-[#B85B4E]"><TrendingDown size={13} /> {change}</p></div>;
+}
+
+function Path({ step, title, body }: { step: string; title: string; body: string }) {
+  return <div className="grid grid-cols-[30px_1fr] gap-3"><span className="font-mono text-[10px] text-[#D4AB5D]">{step}</span><div><p className="font-bold text-[#F7F0E2]">{title}</p><p className="mt-1 text-sm leading-6 text-[#CBD7D0]">{body}</p></div></div>;
 }

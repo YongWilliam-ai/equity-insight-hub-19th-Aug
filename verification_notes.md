@@ -21,3 +21,9 @@ Visual verification was then captured for `?lang=TW`, `?lang=CN` and `?lang=EN`.
 ## Readability and breadth-chart refinement
 
 The desktop screenshots for `?lang=TW` and `?lang=CN` confirm that the file-index controls now use normal horizontal text rather than rotated vertical glyphs. The categories remain visually similar to a research binder but are readable in their natural writing direction. The breadth module now presents a normalised stacked-participation chart for NYSE and Nasdaq, a gold/coral legend, average declining participation, volume participation versus the 20-day average, energy-sector confirmation, individual ratio readouts, and source/normalisation notes. Values are derived from the cited 17 August Reuters breadth ratios and volume figures.
+
+## 19 August BIT Daily Market Intelligence
+
+Desktop visual verification confirms that the new 19 August Simplified Chinese BIT page is the primary landing page, with a persistent EQUITY / INSIGHT research spine, dated section index, thesis-led hero, clearly separated fact and interpretation blocks, a source-and-limitations panel, and a visible link to the 18 August archive. The archive route retains the prior full research layout and now shares the EQUITY / INSIGHT identity. The new page presents only the 19 August verified data set; its limitation note explicitly states that the requested prior-day DOCX was not present and that the local Version 2 master is a disclosed temporary frame of reference.
+
+The mobile BIT report was also captured in a 390 × 844 viewport. Its report hierarchy remains legible without the desktop spine, and the page maintains the thesis, 60-second brief, market dashboard, company notes, event watch and source limitations in a readable single column. The final TypeScript check completed successfully after the unified brand and archive changes.
