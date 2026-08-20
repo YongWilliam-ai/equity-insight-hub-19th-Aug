@@ -82,3 +82,10 @@
 ### Signature Brand Color
 
 **Ledger Brass — #C99A48**：只用於重要事實、資料截點和主題標籤，建立網站的識別性。
+
+## Style Decisions
+
+1. **Signal Tabs：** 市場類別以窄型、可讀的垂直研究檔案標籤呈現於分組清單與ledger entries；類別文字不可只作普通卡片標籤。
+2. **Data Typography：** 市場數值、ticker、比例、時間戳與來源標記一律使用 IBM Plex Mono；DM Serif Display 僅用於主論點與大型編輯式標題。
+3. **Ledger Card Rule：** 重複內容必須有黃銅規則、邊欄註記和來源印記，呈現為研究檔案條目而非通用等權儀表板卡片。
+4. **Canonical Lockup：** 所有路由均以 `EQUITY` 與 `INSIGHT` 的大寫雙行字標配合雙線書脊標誌；其他描述僅可作編輯標籤，不能形成第二個品牌字標。

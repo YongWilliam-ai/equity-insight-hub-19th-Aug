@@ -39,3 +39,21 @@
 - [x] 產出60–90秒簡體中文BIT主報告、2–3句William’s View、Today’s Watch、來源與免責聲明。
 - [x] 僅以同一組已核實事實修訂8月19日網站條目，保留8月18日歷史內容。
 - [x] 完成桌面與行動版驗證、保存版本並交付來源與不確定性狀態。
+
+## BIT Daily Workflow — Dynamic Trading-Day Standard
+
+- [x] 將新工作流整理為可重用規格：動態香港日期、最近完成的美股／港股交易時段與盤前催化劑。
+- [x] 將William提供的材料、上一期報告、網站與本對話研究設為每次執行的優先閱讀起點。
+- [x] 固化全文提取、圖像／表格閱讀、來源失敗披露及Tier 1–3核實規則。
+- [x] 固化Yesterday → Today thesis check、Macro → Stocks → Sector/Industry Chain的報告邏輯。
+- [x] 更新每日任務為香港時間9:30前完成，並保留動態交易日與網站歷史版本要求。
+- [x] 驗證更新後的任務設定與持續交付規則。
+
+## BIT Daily Market Intelligence — 2026-08-20
+
+- [x] 確認香港時間、最近完成的美股／港股交易時段、香港早盤是否已開市，以及前一日BIT報告的thesis與驗證條件。
+- [x] 檢查本對話最新Daily Source Pack、URL與附件；完整擷取可取得的用戶材料和重要視覺資訊。
+- [x] 核實8月19日美股／港股已實現事實、盤後及下一個美股交易日催化劑，建立分層來源紀錄。
+- [x] 形成Yesterday → Today market thesis、confirmed／invalidated判斷及明確的正負面確認條件。
+- [x] 撰寫精簡簡體中文BIT主報告、William’s View、Today’s Watch、References與披露。
+- [x] 僅以同一組已核實事實更新網站並新增2026-08-19歷史頁；完成型別與視覺驗證，並核對每日排程為09:30 HKT。
