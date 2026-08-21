@@ -49,6 +49,14 @@
 - [x] 更新每日任務為香港時間9:30前完成，並保留動態交易日與網站歷史版本要求。
 - [x] 驗證更新後的任務設定與持續交付規則。
 
+## BIT Recurring Workflow — Latest William Specification
+
+- [ ] 將每次執行的Asia/Hong_Kong時間判斷、兩地最近完成交易時段、香港早盤intraday標籤與假期as-of規則逐項記入當日factbook。
+- [ ] 在外部研究前完整檢查並擷取William當日提供的Daily Source Pack、URL、附件、前一日報告與現有網站內容；不可用搜尋摘要替代原文。
+- [ ] 以Tier 1／Tier 2來源為關鍵claim核實，並將每個用戶指定但無法完整取得的來源、已取得範圍及待補資料清楚披露。
+- [ ] 在報告寫作前完成Yesterday → Today thesis check，明確列出昨天watch項的confirmed、partially confirmed、invalidated或unresolved結果。
+- [ ] 每日以Macro → Individual Stocks → Sector / Industry Chain順序產出簡體中文主報告，更新網站同一套核實事實並保留歷史頁、來源及研究免責聲明。
+
 ## BIT Daily Market Intelligence — 2026-08-20
 
 - [x] 確認香港時間、最近完成的美股／港股交易時段、香港早盤是否已開市，以及前一日BIT報告的thesis與驗證條件。
@@ -57,3 +65,11 @@
 - [x] 形成Yesterday → Today market thesis、confirmed／invalidated判斷及明確的正負面確認條件。
 - [x] 撰寫精簡簡體中文BIT主報告、William’s View、Today’s Watch、References與披露。
 - [x] 僅以同一組已核實事實更新網站並新增2026-08-19歷史頁；完成型別與視覺驗證，並核對每日排程為09:30 HKT。
+
+## BIT Daily Market Intelligence — 2026-08-21
+
+- [x] 確認Asia/Hong_Kong實際時間、最近完成美股／港股交易時段及8月20日報告中的待驗證主線。
+- [x] 完整閱讀William上傳的pasted_content_4.txt，區分工作流規格與當日可用的市場／公司事實。
+- [x] 檢查本對話是否存在新的Daily Source Pack或URL；以Tier 1／Tier 2來源核實完成交易時段、港股intraday與下一美股交易日催化劑。
+- [x] 撰寫8月21日簡體中文主報告，完成Yesterday → Today thesis check、來源／不確定性與研究免責聲明。
+- [x] 保留8月20日為歸檔頁，更新網站首頁為8月21日同一組已核實內容，完成型別、視覺驗證與發布。

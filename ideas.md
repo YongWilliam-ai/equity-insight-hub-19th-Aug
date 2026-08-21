@@ -89,3 +89,5 @@
 2. **Data Typography：** 市場數值、ticker、比例、時間戳與來源標記一律使用 IBM Plex Mono；DM Serif Display 僅用於主論點與大型編輯式標題。
 3. **Ledger Card Rule：** 重複內容必須有黃銅規則、邊欄註記和來源印記，呈現為研究檔案條目而非通用等權儀表板卡片。
 4. **Canonical Lockup：** 所有路由均以 `EQUITY` 與 `INSIGHT` 的大寫雙行字標配合雙線書脊標誌；其他描述僅可作編輯標籤，不能形成第二個品牌字標。
+5. **Archive Consistency：** 歷史頁保留日期特有的主結論與研究節奏，但沿用同一EQUITY / INSIGHT字標、研究書脊、證據印記與資料字體，不以「BIT DAILY」形成第二個品牌。
+6. **Brass Discipline：** Ledger Brass `#C99A48`只用於細規則、時間戳、段落編號、Signal Tabs和關鍵論點／數據提示，不作大型裝飾填色或一般CTA底色。
