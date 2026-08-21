@@ -73,3 +73,19 @@
 - [x] 檢查本對話是否存在新的Daily Source Pack或URL；以Tier 1／Tier 2來源核實完成交易時段、港股intraday與下一美股交易日催化劑。
 - [x] 撰寫8月21日簡體中文主報告，完成Yesterday → Today thesis check、來源／不確定性與研究免責聲明。
 - [x] 保留8月20日為歸檔頁，更新網站首頁為8月21日同一組已核實內容，完成型別、視覺驗證與發布。
+
+## Equity Insight Hub Daily Routine v3 — Zoey Feedback
+
+- [x] 完整對照pasted_content_5.txt與現行每日工作流，明確列出保留、簡化、停止及延後項目。
+- [x] 將US Market、HK Market與Cross-Market Thesis設計為同一網站內的清晰分區，而非一條混合時間線。
+- [x] 保留Previous Thesis Review與Yesterday → Interpretation → Today’s Validation，但收斂個股覆蓋至支持主線的證據。
+- [x] 定義Claude遷移就緒的Research Basis／來源正規化schema、資料權限與Bloomberg可存取邊界。
+- [x] 撰寫可直接替換現有排程任務內容的v3 prompt，並清楚標示不需立即執行的未來資料基礎設施或UI工作；現有排程暫不變更，待William確認後才套用。
+
+## Equity Insight Hub V3 Preview — 2026-08-21 Copy
+
+- [x] 保留既有首頁與歷史路由不變，建立以8月21日網站內容為基礎的獨立V3預覽路由。
+- [x] 核實可公開取得的市場廣度歷史序列與板塊日內／日度表現，定義資料截點、來源與可視化限制。
+- [x] 在預覽頁分開呈現Overview、US Market、Hong Kong Market、Cross-Market與Source Ledger，不混成單一時間線。
+- [x] 實作市場廣度5／20日趨勢、滑鼠懸停比較及圖片匯出，並以可追溯資料建立板塊熱力圖。
+- [x] 完成型別、生產建置、桌面及行動版驗證，保存一個不影響既有首頁的預覽版本並交付測試路徑。

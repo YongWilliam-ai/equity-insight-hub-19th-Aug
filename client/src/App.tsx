@@ -9,11 +9,13 @@ import Home from "./pages/Home";
 import ArchiveAug18 from "./pages/ArchiveAug18";
 import ArchiveAug19 from "./pages/ArchiveAug19";
 import ArchiveAug20 from "./pages/ArchiveAug20";
+import V3PreviewAug21 from "./pages/V3PreviewAug21";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/v3/2026-08-21" component={V3PreviewAug21} />
       <Route path="/archive/2026-08-20" component={ArchiveAug20} />
       <Route path="/archive/2026-08-19" component={ArchiveAug19} />
       <Route path="/archive/2026-08-18" component={ArchiveAug18} />
